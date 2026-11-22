@@ -61,12 +61,12 @@ jobs:
       - name: Build PS3 homebrew package
         run: |
           set -e
-          test -f "$PS3DEV/bin/ICON0.PNG"
           make -C ps3 clean
+          make -C ps3
           make -C ps3 pkg
-          ls -lh ps3/ps3-dynamic-date.elf
-          ls -lh ps3/ps3-dynamic-date.self
-          ls -lh ps3/ps3-dynamic-date.pkg
+
+          echo "=== Generated files ==="
+          find ps3 -maxdepth 2 -type f \\( -name '*.elf' -o -name '*.self' -o -name '*.pkg' \\) -print
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
