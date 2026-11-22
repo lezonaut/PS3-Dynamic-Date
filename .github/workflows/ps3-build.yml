@@ -35,6 +35,12 @@ jobs:
           echo "$GITHUB_WORKSPACE/ps3dev/ppu/bin" >> "$GITHUB_PATH"
           echo "$GITHUB_WORKSPACE/ps3dev/spu/bin" >> "$GITHUB_PATH"
 
+      - name: Inspect PS3 SDK
+        run: |
+          echo "PS3DEV=$PS3DEV"
+          find "$PS3DEV" -maxdepth 3 -type d | sort | head -100
+          find "$PS3DEV" -name 'ppu_rules' -o -name 'libsysutil.a' -o -name 'libgcm_sys.a'
+
       - name: Verify compiler
         run: |
           test -x "$PS3DEV/ppu/bin/ppu-gcc"
