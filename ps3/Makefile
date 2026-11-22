@@ -14,6 +14,8 @@ ICON0 := $(PS3DEV)/bin/ICON0.PNG
 
 include $(PSL1GHT)/ppu_rules
 
+LD := $(PS3DEV)/ppu/bin/ppu-gcc
+
 .PHONY: pkg clean
 
 pkg: $(TARGET).pkg
