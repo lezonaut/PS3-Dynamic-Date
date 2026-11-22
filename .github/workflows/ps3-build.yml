@@ -71,6 +71,15 @@ jobs:
           ls -lh ps3/ps3-dynamic-date.self
           ls -lh ps3/ps3-dynamic-date.pkg
 
+          echo "=== ELF architecture ==="
+          file ps3/ps3-dynamic-date.elf
+          readelf -h ps3/ps3-dynamic-date.elf
+
+          echo "=== Package contents ==="
+          find ps3/build -type f -maxdepth 5 -print
+          echo "=== EBOOT.BIN check ==="
+          find ps3 -name EBOOT.BIN -exec file {} \;
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
