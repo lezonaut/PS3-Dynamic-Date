@@ -41,6 +41,22 @@ jobs:
           find "$PS3DEV" -maxdepth 3 -type d | sort | head -100
           find "$PS3DEV" -name 'ppu_rules' -o -name 'libsysutil.a' -o -name 'libgcm_sys.a'
 
+      - name: Verify PSL1GHT graphics SDK
+        run: |
+          echo "Checking PS3 graphics headers..."
+
+          find "$PS3DEV/ppu/include/rsx" -maxdepth 2 -type f | head -30
+
+          echo "Checking libraries..."
+          find "$PS3DEV/ppu/lib" -maxdepth 1 \\
+            \( -name '*gcm*' -o -name '*sysutil*' \) -print
+
+          test -f "$PS3DEV/ppu/include/rsx/rsx.h"
+          test -f "$PS3DEV/ppu/lib/libgcm_sys.a"
+          test -f "$PS3DEV/ppu/lib/libsysutil.a"
+
+          echo "PSL1GHT graphics SDK checks passed!"
+
       - name: Verify compiler
         run: |
           test -x "$PS3DEV/ppu/bin/ppu-gcc"
