@@ -1,0 +1,54 @@
+name: PS3 Dynamic Date Build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y curl jq
+
+      - name: Download PS3DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          API="https://api.github.com/repos/ps3dev/ps3dev/releases/latest"
+
+          URL=$(curl -fsSL "$API" | jq -r \
+            '.assets[] | select(.name | contains("ubuntu-latest.tar.gz")) | .browser_download_url' \
+            | head -n 1)
+
+          if [ -z "$URL" ]; then
+            echo "PS3DEV Ubuntu release asset not found"
+            exit 1
+          fi
+
+          mkdir -p "$GITHUB_WORKSPACE/ps3dev"
+          curl -fL "$URL" -o ps3dev.tar.gz
+          tar -xzf ps3dev.tar.gz -C "$GITHUB_WORKSPACE/ps3dev"
+
+          echo "PS3DEV=$GITHUB_WORKSPACE/ps3dev" >> "$GITHUB_ENV"
+          echo "PSL1GHT=$GITHUB_WORKSPACE/ps3dev" >> "$GITHUB_ENV"
+          echo "$GITHUB_WORKSPACE/ps3dev/bin" >> "$GITHUB_PATH"
+          echo "$GITHUB_WORKSPACE/ps3dev/ppu/bin" >> "$GITHUB_PATH"
+          echo "$GITHUB_WORKSPACE/ps3dev/spu/bin" >> "$GITHUB_PATH"
+
+      - name: Verify PPU compiler
+        run: |
+          ppu-gcc --version
+          ppu-gcc -Wall -O2 -c ps3/src/main.c -o main.o
+
+      - name: Upload test object
+        uses: actions/upload-artifact@v4
+        with:
+          name: ps3-dynamic-date-test
+          path: main.o
