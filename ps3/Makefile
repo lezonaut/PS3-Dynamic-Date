@@ -1,8 +1,8 @@
 TARGET := ps3-dynamic-date
 OFILES := src/main.o
 
-CFLAGS := -I$(PS3DEV)/ppu/include -std=gnu99 -O2 -Wall
-LDFLAGS :=
+CFLAGS := $(MACHDEP) $(LIBPSL1GHT_INC) -std=gnu99 -O2 -Wall
+LDFLAGS := $(MACHDEP)
 LIBS := -lsysutil
 
 BUILDDIR := build
