@@ -46,8 +46,15 @@ jobs:
             -c ps3/src/main.c \
             -o main.o
 
+      - name: Link PPU ELF
+        run: |
+          ppu-gcc main.o -o ps3-date-test.elf
+          file ps3-date-test.elf
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ps3-dynamic-date-test
-          path: main.o
+          name: ps3-dynamic-date-elf-test
+          path: |
+            main.o
+            ps3-date-test.elf
