@@ -1,6 +1,6 @@
 TARGET := ps3-dynamic-date
-
 OFILES := src/main.o
+
 CFLAGS := -I$(PS3DEV)/ppu/include -std=gnu99 -O2 -Wall
 LDFLAGS :=
 LIBS := -lsysutil
@@ -19,4 +19,4 @@ include $(PSL1GHT)/ppu_rules
 pkg: $(TARGET).pkg
 
 clean:
-\trm -rf $(TARGET)*.elf $(TARGET)*.self $(TARGET)*.pkg $(BUILDDIR)
+	rm -rf $(TARGET)*.elf $(TARGET)*.self $(TARGET)*.pkg $(BUILDDIR)
