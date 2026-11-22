@@ -58,21 +58,21 @@ jobs:
           test -x "$PS3DEV/ppu/bin/ppu-gcc"
           ppu-gcc --version
 
-      - name: Compile PS3 test
+      - name: Build PS3 homebrew package
         run: |
-          ppu-gcc -Wall -O2 \
-            -c ps3/src/main.c \
-            -o main.o
-
-      - name: Link PPU ELF
-        run: |
-          ppu-gcc main.o -o ps3-date-test.elf
-          file ps3-date-test.elf
+          set -e
+          test -f "$PS3DEV/bin/ICON0.PNG"
+          make -C ps3 clean
+          make -C ps3 pkg
+          ls -lh ps3/ps3-dynamic-date.elf
+          ls -lh ps3/ps3-dynamic-date.self
+          ls -lh ps3/ps3-dynamic-date.pkg
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ps3-dynamic-date-elf-test
+          name: ps3-dynamic-date-homebrew
           path: |
-            main.o
-            ps3-date-test.elf
+            ps3/ps3-dynamic-date.elf
+            ps3/ps3-dynamic-date.self
+            ps3/ps3-dynamic-date.pkg
